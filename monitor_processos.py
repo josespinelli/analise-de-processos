@@ -11,17 +11,19 @@ def processos_hierarquias():
     
     hierarquia = {}
 
-    for proc in psutil.process_iter(['pid', 'name', 'ppid', 'status']):
+    for proc in psutil.process_iter(['pid', 'name', 'ppid', 'status', 'cpu_percent', 'memory_info']):
         try:
             info = proc.info
             pid = info['pid']
             ppid = info['ppid']
             nome = info['name']
             status = info['status']
+            cpu_percent = info['cpu_percent']
+            memory_info = info['memory_info']
 
             if ppid not in hierarquia:
                 hierarquia[ppid] = []
-            hierarquia[ppid].append((pid, nome, status))
+            hierarquia[ppid].append((pid, nome, status, cpu_percent, memory_info.rss))
 
             if status == psutil.STATUS_ZOMBIE:
                 print(f'Processo Zumbi encontrado: PID={pid}, Nome={nome}, PPID={ppid}')
@@ -31,12 +33,12 @@ def processos_hierarquias():
             continue
 
     linha()
-    print('\n','\033[33mHIERAEQUIA DE PROCESSOS:\033[m'.center(80),'\n')
+    print('\n','\033[33mHIERARQUIA DE PROCESSOS:\033[m'.center(80),'\n')
     linha()
     for ppid, processos in hierarquia.items():
         print(f'Processo Pai (PPID={ppid}):')
-        for pid, nome, status in processos:
-            print(f'  -> PID={pid}, Nome={nome}, Status={status}')
+        for pid, nome, status, cpu_percent, memory_rss in processos:
+            print(f'  -> PID={pid}, Nome={nome}, Status={status}, CPU%={cpu_percent}, Memória RSS={memory_rss / 1024 / 1024:.2f} MB')
             i_pid += 1
         linha()
         i_ppid += 1
@@ -54,11 +56,4 @@ print(f'TOTAL DE PROCESSOS PAI: {ppid}')
 print(f'TOTAL DE PROCESSOS FILHO: {pid}')
 print(f'TOTAL DE PROCESSOS ZUMBI: {zumbi}')
 linha()
-while True:
-    comando = input("\nDigite 'EXIT' para fechar o prompt: ").strip().lower()
-    if comando == 'exit':
-        print("Fechando o prompt...")
-        time.sleep(2)
-        break
-    else:
-        print("Comando inválido. Digite 'EXIT' para sair.")
+input('Pressione "ENTER" para fechar o prompt: ')
