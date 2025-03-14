@@ -1,5 +1,5 @@
 Autor:
-José Spinelli
+José Spinelli (GitHub: https://github.com/josespinelli)
 
 Monitor de Processos e Hierarquias
 
@@ -9,6 +9,7 @@ Funcionalidades:
 - Listagem de Processos: Exibe a hierarquia de processos, mostrando a relação entre processos pais e filhos.
 - Identificação de Zumbis: Detecta e lista processos zumbis (processos que terminaram, mas ainda possuem entradas na tabela de processos).
 - Relatório de Execução: Gera um relatório com o tempo de execução, o número total de processos pais, processos filhos e processos zumbis encontrados.
+- Análise de consumo de CPU e memória por processo analisado.
 
 Requisitos:
 - Python 3.x instalado.
